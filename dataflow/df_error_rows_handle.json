@@ -1,0 +1,90 @@
+{
+	"name": "df_error_rows_handle",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "SalesGlobal"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
+					},
+					"name": "RecordsError"
+				},
+				{
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
+					},
+					"name": "SaveGoodRecords"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ErrosRow"
+				},
+				{
+					"name": "GetNameFileError"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          SaleDate as string,",
+				"          SalesItem as string,",
+				"          Country as string,",
+				"          Quantity as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:['error_rows_handle_dataflow/input_files/GlobalSales_MAY_01.csv']) ~> SalesGlobal",
+				"SalesGlobal split(isNull(toDate(SaleDate, 'dd-MMM-yyyy')),",
+				"     disjoint: false) ~> ErrosRow@(ErrorRows, GoodRows)",
+				"ErrosRow@ErrorRows derive(file_name = 'GlobalSales_MAY_01.csv') ~> GetNameFileError",
+				"GetNameFileError sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'filesadf',",
+				"     folderPath: 'error_rows_handle_dataflow/bad_records',",
+				"     truncate: true,",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['GlobalSalesBadRecords.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> RecordsError",
+				"ErrosRow@GoodRows sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'filesadf',",
+				"     folderPath: 'error_rows_handle_dataflow/good_records',",
+				"     truncate: true,",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['GlobalSalesProcess.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SaveGoodRecords"
+			]
+		}
+	}
+}
