@@ -68,7 +68,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('CopyFilesToOutput').output.Value",
+						"value": "@activity('FilterFiles').output.Value",
 						"type": "Expression"
 					},
 					"activities": [
@@ -92,7 +92,7 @@
 										"recursive": true,
 										"wildcardFolderPath": "pl_get_filenames",
 										"wildcardFileName": {
-											"value": "@item().file_name",
+											"value": "@item().name",
 											"type": "Expression"
 										},
 										"enablePartitionDiscovery": false
@@ -135,7 +135,7 @@
 									"parameters": {
 										"directory": "pl_get_filenames/output_files",
 										"file_name": {
-											"value": "@item().file_name",
+											"value": "@item().name",
 											"type": "Expression"
 										}
 									}
