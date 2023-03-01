@@ -14,16 +14,16 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "ds_generic_csv",
-						"type": "DatasetReference"
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
 					},
 					"name": "RecordsError"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_generic_csv",
-						"type": "DatasetReference"
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
 					},
 					"name": "SaveGoodRecords"
 				}
@@ -52,7 +52,14 @@
 				"ErrosRow@ErrorRows derive(file_name = 'GlobalSales_MAY_01.csv') ~> GetNameFileError",
 				"GetNameFileError sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'filesadf',",
+				"     folderPath: 'error_rows_handle_dataflow/bad_records',",
 				"     truncate: true,",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: false,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
@@ -60,7 +67,14 @@
 				"     skipDuplicateMapOutputs: true) ~> RecordsError",
 				"ErrosRow@GoodRows sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'filesadf',",
+				"     folderPath: 'error_rows_handle_dataflow/good_records',",
 				"     truncate: true,",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: false,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
