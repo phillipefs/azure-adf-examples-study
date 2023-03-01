@@ -1,0 +1,9 @@
+{
+	"name": "adf-study-developer",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "c44c7921-406e-4995-affe-d9e0a48545b3",
+		"tenantId": "e0300b03-dac9-4afe-9687-9e9a38e831ac"
+	}
+}
