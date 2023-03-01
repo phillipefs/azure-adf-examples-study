@@ -3,11 +3,69 @@
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
-			"sinks": [],
-			"transformations": [],
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "SalesGlobal"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "RecordsError"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "SaveGoodRecords"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ErrosRow"
+				},
+				{
+					"name": "GetNameFileError"
+				}
+			],
 			"scriptLines": [
-				""
+				"source(output(",
+				"          SaleDate as string,",
+				"          SalesItem as string,",
+				"          Country as string,",
+				"          Quantity as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:['error_rows_handle_dataflow/input_files/GlobalSales_MAY_01.csv']) ~> SalesGlobal",
+				"SalesGlobal split(isNull(toDate(SaleDate, 'dd-MMM-yyyy')),",
+				"     disjoint: false) ~> ErrosRow@(ErrorRows, GoodRows)",
+				"ErrosRow@ErrorRows derive(file_name = 'GlobalSales_MAY_01.csv') ~> GetNameFileError",
+				"GetNameFileError sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RecordsError",
+				"ErrosRow@GoodRows sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SaveGoodRecords"
 			]
 		}
 	}
