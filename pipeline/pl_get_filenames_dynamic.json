@@ -67,6 +67,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('CopyFilesToOutput').output.Value",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "CopyFilesToOutput",
@@ -88,7 +92,7 @@
 										"recursive": true,
 										"wildcardFolderPath": "pl_get_filenames",
 										"wildcardFileName": {
-											"value": "@item().value.file_name",
+											"value": "@item().file_name",
 											"type": "Expression"
 										},
 										"enablePartitionDiscovery": false
@@ -126,8 +130,15 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_generic_csv",
-									"type": "DatasetReference"
+									"referenceName": "ds_generic_parameter_csv",
+									"type": "DatasetReference",
+									"parameters": {
+										"directory": "pl_get_filenames/output_files",
+										"file_name": {
+											"value": "@item().file_name",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
