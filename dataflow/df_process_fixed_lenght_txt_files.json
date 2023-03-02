@@ -1,0 +1,68 @@
+{
+	"name": "df_process_fixed_lenght_txt_files",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_emp_fixed_leght",
+						"type": "DatasetReference"
+					},
+					"name": "ProcessTxtFixedLeght"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
+					},
+					"name": "SaveFile"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SplitColumns"
+				},
+				{
+					"name": "SelectColumns"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Column_1 as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ProcessTxtFixedLeght",
+				"ProcessTxtFixedLeght derive(emp_id = substring(Column_1, 1, 4),",
+				"          emp_name = substring(Column_1, 5, 10),",
+				"          state = substring(Column_1, 14, 2),",
+				"          emp_contract = substring(Column_1, 17, 10)) ~> SplitColumns",
+				"SplitColumns select(mapColumn(",
+				"          emp_id,",
+				"          emp_name,",
+				"          state,",
+				"          emp_contract",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
+				"SelectColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'filesadf',",
+				"     folderPath: 'process_fixed_lenght_txt_files',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SaveFile"
+			]
+		}
+	}
+}
