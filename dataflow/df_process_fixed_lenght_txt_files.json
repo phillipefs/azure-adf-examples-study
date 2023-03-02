@@ -56,7 +56,7 @@
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: false,",
+				"     columnNamesAsHeader: true,",
 				"     partitionFileNames:['emp.csv'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
