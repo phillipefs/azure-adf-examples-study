@@ -21,15 +21,15 @@
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"modifiedDatetimeStart": {
-								"value": "@addDays(utcNow(), -2)",
+								"value": "@addDays(utcNow(),-2)",
 								"type": "Expression"
 							},
 							"modifiedDatetimeEnd": {
 								"value": "@utcNow()",
 								"type": "Expression"
 							},
-							"wildcardFolderPath": "load_incrementally_using_last_modied_date",
-							"wildcardFileName": "*csv",
+							"wildcardFolderPath": "load_incrementally_using_last_modied_date/input_files",
+							"wildcardFileName": "*.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -65,12 +65,8 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_generic_parameter_csv",
-						"type": "DatasetReference",
-						"parameters": {
-							"directory": "load_incrementally_using_last_modied_date/output_files",
-							"file_name": "*"
-						}
+						"referenceName": "ds_generic_output_csv",
+						"type": "DatasetReference"
 					}
 				]
 			}
