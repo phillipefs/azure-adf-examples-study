@@ -1,0 +1,6 @@
+{
+	"name": "pl_log_pipeline_to_sql_table",
+	"properties": {
+		"annotations": []
+	}
+}
