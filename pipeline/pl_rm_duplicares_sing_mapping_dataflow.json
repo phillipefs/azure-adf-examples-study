@@ -1,5 +1,5 @@
 {
-	"name": "pl_remove_duplicares_rows_using_mapping_dataflow",
+	"name": "pl_rm_duplicares_sing_mapping_dataflow",
 	"properties": {
 		"annotations": []
 	}
