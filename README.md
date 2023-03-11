@@ -4,4 +4,4 @@
 
 ## Pré-Requisitos:
 Conhecimento basico em Azure, Big Data, Data Warehouse e Data Lake, SQL e Spark.
-* [Conta Microsoft Azure](https://azure.microsoft.com/en-us/free/); 
+* [Conta Microsoft Azure](https://azure.microsoft.com/en-us/free/)
