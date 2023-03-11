@@ -1,10 +1,6 @@
 {
 	"name": "ds_generic_parameter_csv",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "ls_datalake",
-			"type": "LinkedServiceReference"
-		},
 		"parameters": {
 			"directory": {
 				"type": "string"
