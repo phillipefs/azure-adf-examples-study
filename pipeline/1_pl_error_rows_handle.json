@@ -1,9 +1,9 @@
 {
-	"name": "pl_process_fixed_lenght_txt_files",
+	"name": "1_pl_error_rows_handle",
 	"properties": {
 		"activities": [
 			{
-				"name": "exec process_fixed_lenght_txt_files",
+				"name": "exec df_error_rows_handle",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_process_fixed_lenght_txt_files",
+						"referenceName": "1_df_error_rows_handle",
 						"type": "DataFlowReference"
 					},
 					"compute": {

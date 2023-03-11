@@ -1,5 +1,5 @@
 {
-	"name": "df_process_fixed_lenght_txt_files",
+	"name": "5_df_process_fixed_lenght_txt_files",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
+					},
 					"name": "SaveFile"
 				}
 			],
@@ -46,19 +50,20 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
 				"SelectColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['emp.csv'],",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1),",
 				"     format: 'delimited',",
 				"     fileSystem: 'filesadf',",
-				"     folderPath: 'process_fixed_lenght_txt_files',",
+				"     folderPath: 'process_fixed_lenght_txt_files/output_files',",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: true,",
+				"     columnNamesAsHeader: false,",
+				"     partitionFileNames:['emp.csv'],",
+				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: []) ~> SaveFile"
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SaveFile"
 			]
 		}
 	}

@@ -1,5 +1,5 @@
 {
-	"name": "pl_load_incrementally_using_last_modied_date",
+	"name": "3_pl_load_incrementally_using_last_modied_date",
 	"properties": {
 		"activities": [
 			{
@@ -66,7 +66,11 @@
 				"outputs": [
 					{
 						"referenceName": "ds_generic_output_csv",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": "load_incrementally_using_last_modied_date/output_files",
+							"file_name": "load_incrementally.csv"
+						}
 					}
 				]
 			}

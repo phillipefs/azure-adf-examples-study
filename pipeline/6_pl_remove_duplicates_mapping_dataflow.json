@@ -1,5 +1,5 @@
 {
-	"name": "pl_remove_duplicates_mapping_dataflow",
+	"name": "6_pl_remove_duplicates_mapping_dataflow",
 	"properties": {
 		"activities": [
 			{

@@ -1,5 +1,5 @@
 {
-	"name": "pl_get_filenames_dynamic",
+	"name": "2_pl_get_filenames_dynamic",
 	"properties": {
 		"activities": [
 			{
@@ -24,6 +24,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -90,7 +91,7 @@
 									"storeSettings": {
 										"type": "AzureBlobFSReadSettings",
 										"recursive": true,
-										"wildcardFolderPath": "pl_get_filenames",
+										"wildcardFolderPath": "pl_get_filenames/input_files",
 										"wildcardFileName": {
 											"value": "@item().name",
 											"type": "Expression"
