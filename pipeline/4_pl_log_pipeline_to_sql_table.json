@@ -1,5 +1,5 @@
 {
-	"name": "pl_log_pipeline_to_sql_table",
+	"name": "4_pl_log_pipeline_to_sql_table",
 	"properties": {
 		"activities": [
 			{
