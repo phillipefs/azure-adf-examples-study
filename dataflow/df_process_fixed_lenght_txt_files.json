@@ -14,10 +14,6 @@
 			],
 			"sinks": [
 				{
-					"linkedService": {
-						"referenceName": "ls_datalake",
-						"type": "LinkedServiceReference"
-					},
 					"name": "SaveFile"
 				}
 			],
@@ -50,6 +46,10 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
 				"SelectColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['emp.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1),",
 				"     format: 'delimited',",
 				"     fileSystem: 'filesadf',",
 				"     folderPath: 'process_fixed_lenght_txt_files',",
@@ -57,13 +57,8 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true,",
-				"     partitionFileNames:['emp.csv'],",
-				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: [],",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> SaveFile"
+				"     postCommands: []) ~> SaveFile"
 			]
 		}
 	}
