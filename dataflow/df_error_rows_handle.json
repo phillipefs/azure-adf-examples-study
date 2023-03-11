@@ -14,9 +14,17 @@
 			],
 			"sinks": [
 				{
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
+					},
 					"name": "RecordsError"
 				},
 				{
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
+					},
 					"name": "SaveGoodRecords"
 				}
 			],
@@ -44,36 +52,37 @@
 				"ErrosRow@ErrorRows derive(file_name = 'GlobalSales_MAY_01.csv') ~> GetNameFileError",
 				"GetNameFileError sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['GlobalSalesBadRecords.csv'],",
-				"     truncate: true,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1),",
 				"     format: 'delimited',",
 				"     fileSystem: 'filesadf',",
-				"     folderPath: 'error_rows_handle_dataflow/bad_records',",
+				"     folderPath: 'error_rows_handle_dataflow/error_records',",
+				"     truncate: true,",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: true,",
+				"     columnNamesAsHeader: false,",
+				"     partitionFileNames:['GlobalSalesBadRecords.csv'],",
+				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: []) ~> RecordsError",
-				"ErrosRow@GoodRows sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     partitionFileNames:['GlobalSalesProcess.csv'],",
-				"     truncate: true,",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1),",
+				"     partitionBy('hash', 1)) ~> RecordsError",
+				"ErrosRow@GoodRows sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     fileSystem: 'filesadf',",
 				"     folderPath: 'error_rows_handle_dataflow/good_records',",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: true,",
+				"     columnNamesAsHeader: false,",
+				"     partitionFileNames:['GlobalSalesProcess.csv'],",
+				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: []) ~> SaveGoodRecords"
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SaveGoodRecords"
 			]
 		}
 	}
