@@ -20,6 +20,11 @@
 						"type": "DatasetReference"
 					},
 					"fieldList": [],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
 					"formatSettings": {
 						"type": "DelimitedTextReadSettings"
 					}

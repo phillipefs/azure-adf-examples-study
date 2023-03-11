@@ -1,13 +1,16 @@
 {
 	"name": "ds_get_filenames_folder",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_datalake",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "input_files",
-				"folderPath": "pl_get_filenames",
+				"folderPath": "pl_get_filenames/input_files",
 				"fileSystem": "filesadf"
 			},
 			"columnDelimiter": ",",
