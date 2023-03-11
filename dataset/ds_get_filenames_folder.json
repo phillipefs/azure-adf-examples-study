@@ -6,6 +6,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "input_files",
 				"folderPath": "pl_get_filenames",
 				"fileSystem": "filesadf"
 			},

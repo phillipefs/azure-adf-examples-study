@@ -19,13 +19,7 @@
 						"referenceName": "ds_get_filenames_folder",
 						"type": "DatasetReference"
 					},
-					"fieldList": [
-						"childItems"
-					],
-					"storeSettings": {
-						"type": "AzureBlobFSReadSettings",
-						"enablePartitionDiscovery": false
-					},
+					"fieldList": [],
 					"formatSettings": {
 						"type": "DelimitedTextReadSettings"
 					}
@@ -90,7 +84,7 @@
 									"storeSettings": {
 										"type": "AzureBlobFSReadSettings",
 										"recursive": true,
-										"wildcardFolderPath": "pl_get_filenames",
+										"wildcardFolderPath": "pl_get_filenames/input_files",
 										"wildcardFileName": {
 											"value": "@item().name",
 											"type": "Expression"
