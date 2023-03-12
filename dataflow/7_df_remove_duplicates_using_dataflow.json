@@ -59,7 +59,7 @@
 				"     wildcardPaths:['7_pl_remove_duplicates_using_dataflow/input_files/employees.csv']) ~> EmployeesNew",
 				"EmployeesSource, EmployeesNew union(byName: true)~> UnionFiles",
 				"UnionFiles aggregate(groupBy(empid),",
-				"     each(match(name != 'empid'), $$ = last($$))) ~> RemoveDuplicates",
+				"     each(match(name != 'empid'), $$ = first($$))) ~> RemoveDuplicates",
 				"RemoveDuplicates sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delimited',",
