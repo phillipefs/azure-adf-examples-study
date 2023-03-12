@@ -65,15 +65,18 @@
 				"     format: 'delimited',",
 				"     fileSystem: 'filesadf',",
 				"     folderPath: '7_pl_remove_duplicates_using_dataflow/output_files',",
+				"     truncate: true,",
 				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
-				"     columnNamesAsHeader: false,",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['employees_without_duplicates.csv'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SaveFile"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SaveFile"
 			]
 		}
 	}
