@@ -1,0 +1,83 @@
+{
+	"name": "7_df_remove_duplicates_using_dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "EmployeesSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "EmployeesNew"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
+					},
+					"name": "SaveFile"
+				}
+			],
+			"transformations": [
+				{
+					"name": "UnionFiles"
+				},
+				{
+					"name": "RemoveDuplicates"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as short,",
+				"          name as string,",
+				"          contry as string,",
+				"          departament as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:['7_pl_remove_duplicates_using_dataflow/input_files/employeesNew.csv']) ~> EmployeesSource",
+				"source(output(",
+				"          empid as short,",
+				"          name as string,",
+				"          contry as string,",
+				"          departament as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:['7_pl_remove_duplicates_using_dataflow/input_files/employees.csv']) ~> EmployeesNew",
+				"EmployeesSource, EmployeesNew union(byName: true)~> UnionFiles",
+				"UnionFiles aggregate(groupBy(empid),",
+				"     each(match(name != 'empid'), $$ = first($$))) ~> RemoveDuplicates",
+				"RemoveDuplicates sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'filesadf',",
+				"     folderPath: '7_pl_remove_duplicates_using_dataflow/output_files',",
+				"     truncate: true,",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['employees_without_duplicates.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SaveFile"
+			]
+		}
+	}
+}
