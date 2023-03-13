@@ -1,0 +1,112 @@
+{
+	"name": "8_df_increment_key_dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "AllEmployeeSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "EmployeeIncrement"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "ls_datalake",
+						"type": "LinkedServiceReference"
+					},
+					"name": "SaveAllEmployees"
+				}
+			],
+			"transformations": [
+				{
+					"name": "CreateDummyColumn"
+				},
+				{
+					"name": "AggGetMaxID"
+				},
+				{
+					"name": "CrossJoin"
+				},
+				{
+					"name": "SurrogateKey"
+				},
+				{
+					"name": "CreateColumnIDIncremental"
+				},
+				{
+					"name": "SelectColumns"
+				},
+				{
+					"name": "UnionIncremental"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as string,",
+				"          name as string,",
+				"          contry as string,",
+				"          departament as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:['8_pl_increment_key_dataflow/input_files/Allemployees.csv']) ~> AllEmployeeSource",
+				"source(output(",
+				"          name as string,",
+				"          contry as string,",
+				"          departament as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:['8_pl_increment_key_dataflow/input_files/employees.csv']) ~> EmployeeIncrement",
+				"AllEmployeeSource derive(dummy = 'dummy') ~> CreateDummyColumn",
+				"CreateDummyColumn aggregate(groupBy(dummy),",
+				"     Max_ID = max(empid)) ~> AggGetMaxID",
+				"AggGetMaxID, EmployeeIncrement join(1==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> CrossJoin",
+				"CrossJoin keyGenerate(output(id as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> SurrogateKey",
+				"SurrogateKey derive(empid = toString(toInteger(id) + toInteger(Max_ID))) ~> CreateColumnIDIncremental",
+				"CreateColumnIDIncremental select(mapColumn(",
+				"          empid,",
+				"          name,",
+				"          contry,",
+				"          departament",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
+				"AllEmployeeSource, SelectColumns union(byName: true)~> UnionIncremental",
+				"UnionIncremental sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'filesadf',",
+				"     folderPath: '8_pl_increment_key_dataflow/output_files',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SaveAllEmployees"
+			]
+		}
+	}
+}
