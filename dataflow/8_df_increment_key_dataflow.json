@@ -1,0 +1,71 @@
+{
+	"name": "8_df_increment_key_dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "AllEmployeeSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_generic_csv",
+						"type": "DatasetReference"
+					},
+					"name": "EmployeeIncrement"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "CreateDummyColumn"
+				},
+				{
+					"name": "AggGetMaxID"
+				},
+				{
+					"name": "CrossJoin"
+				},
+				{
+					"name": "SurrogateKey"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as short,",
+				"          name as string,",
+				"          contry as string,",
+				"          departament as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:['8_pl_increment_key_dataflow/input_files/Allemployees.csv']) ~> AllEmployeeSource",
+				"source(output(",
+				"          name as string,",
+				"          contry as string,",
+				"          departament as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:['8_pl_increment_key_dataflow/input_files/employees.csv']) ~> EmployeeIncrement",
+				"AllEmployeeSource derive(dummy = 'dummy') ~> CreateDummyColumn",
+				"CreateDummyColumn aggregate(groupBy(dummy),",
+				"     Max_ID = max(empid)) ~> AggGetMaxID",
+				"AggGetMaxID, EmployeeIncrement join(1==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> CrossJoin",
+				"CrossJoin keyGenerate(output(id as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> SurrogateKey"
+			]
+		}
+	}
+}
