@@ -52,7 +52,7 @@
 				"     compressionType: 'snappy',",
 				"     compressionLevel: 'Fastest',",
 				"     fileSystem: 'filesadf',",
-				"     folderPath: '10_pl_SCD_type1_dataflow',",
+				"     folderPath: '10_pl_SCD_type1_dataflow/input_files/Table_Delta',",
 				"     mergeSchema: false,",
 				"     autoCompact: false,",
 				"     optimizedWrite: false,",
