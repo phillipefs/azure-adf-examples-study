@@ -28,7 +28,7 @@
 								"value": "@utcNow()",
 								"type": "Expression"
 							},
-							"wildcardFolderPath": "load_incrementally_using_last_modied_date/input_files",
+							"wildcardFolderPath": "3_pl_load_incrementally_using_last_modied_date/input_files",
 							"wildcardFileName": "*.csv",
 							"enablePartitionDiscovery": false
 						},
@@ -68,7 +68,7 @@
 						"referenceName": "ds_generic_output_csv",
 						"type": "DatasetReference",
 						"parameters": {
-							"directory": "load_incrementally_using_last_modied_date/output_files",
+							"directory": "3_pl_load_incrementally_using_last_modied_date/output_files",
 							"file_name": "load_incrementally.csv"
 						}
 					}
