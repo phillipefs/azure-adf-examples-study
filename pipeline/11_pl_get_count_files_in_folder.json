@@ -56,7 +56,7 @@
 				}
 			},
 			{
-				"name": "If Condition1",
+				"name": "Conditional",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -69,7 +69,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(variables('count_files'),2)",
+						"value": "@equals(variables('count_files'),'2')",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
